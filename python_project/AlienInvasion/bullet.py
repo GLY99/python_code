@@ -18,6 +18,10 @@ class Bullet(sprite.Sprite):
         # 在（0， 0）创建一个表示子弹的矩形， 再设置正确的位置
         self.rect = pygame.Rect(0, 0, self.setting.bullet_width, self.setting.bullet_height)
         self.rect.midtop = ai_game.ship.rect.midtop
+        # 如果想自定义子弹，代码如下
+        # self.image = pygame.image.load("images/ship.bmp")
+        # self.rect = self.image.get_rect()
+        # self.rect.midtop = ai_game.ship.rect.midtop
 
         # 子弹只会在y方向移动
         self.y = float(self.rect.y)
@@ -36,3 +40,5 @@ class Bullet(sprite.Sprite):
         :return:
         """
         pygame.draw.rect(self.screen, self.color, self.rect)
+        # 如果是自定义的子弹，绘制如下
+        # self.screen.blit(self.image, self.rect)
