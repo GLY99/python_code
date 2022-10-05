@@ -1,13 +1,11 @@
 import pygame
 
-import  alien_invasion
-
 
 class Ship(object):
     """
     管理飞船的类
     """
-    def __init__(self, ai_game: alien_invasion.AlienInvasion) -> None:
+    def __init__(self, ai_game) -> None:
         """
         初始化飞船并且设置位置
         """
@@ -25,10 +23,13 @@ class Ship(object):
 
         # 在飞船的属性x中存储小数
         self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
 
         # 移动标志
         self.moveing_right = False
         self.moveing_left = False
+        self.moveing_up = False
+        self.moveing_down = False
 
     def blitem(self) -> None:
         """
@@ -46,4 +47,18 @@ class Ship(object):
             self.x += self.setting.ship_speed
         if self.moveing_left and self.rect.left > 0:
             self.x -= self.setting.ship_speed
+        if self.moveing_up and self.rect.top > 0:
+            self.y -= self.setting.ship_speed
+        if self.moveing_down and self.rect.bottom < self.screen_rect.bottom:
+            self.y += self.setting.ship_speed
         self.rect.x = self.x
+        self.rect.y = self.y
+
+    def center_ship(self) -> None:
+        """
+        让飞船居中
+        :return:
+        """
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
