@@ -7,6 +7,7 @@ import ship
 import bullet
 import alien
 import game_stats
+import button
 
 
 class AlienInvasion(object):
@@ -32,13 +33,13 @@ class AlienInvasion(object):
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
         self.stats = game_stats.GameStats(self)
+        self.play_button = button.Button(self, "Play")
 
     def run_game(self) -> None:
         """
         开始游戏的主循环
         :return:
         """
-        self.stats.ship_left -= 1
         while True:
             self._check_event()
             if self.stats.game_activate:
@@ -60,6 +61,9 @@ class AlienInvasion(object):
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
 
     def _update_screen(self) -> None:
         """
@@ -73,6 +77,8 @@ class AlienInvasion(object):
         for bul in self.bullets.sprites():
             bul.draw_bullet()
         self.aliens.draw(self.screen)
+        if not self.stats.game_activate:
+            self.play_button.draw_button()
         # 让最近录制的屏幕可见
         pygame.display.flip()
 
@@ -217,6 +223,7 @@ class AlienInvasion(object):
             time.sleep(0.5)
         else:
             self.stats.game_activate = False
+            pygame.mouse.set_visible(True)
 
     def _check_alien_bottom(self) -> None:
         """
@@ -228,6 +235,23 @@ class AlienInvasion(object):
             if al.rect.bottom >= screen_rect.bottom:
                 self._ship_hit()
                 break
+
+    def _check_play_button(self, mouse_pos) -> None:
+        """
+        在单击play时开始游戏
+        :param mouse_pos:
+        :return:
+        """
+        if self.play_button.rect.collidepoint(mouse_pos) and not self.stats.game_activate:
+            self.stats.reset_stats()
+            self.stats.game_activate = True
+            # 清空余下的外星人和子弹
+            self.aliens.empty()
+            self.bullets.empty()
+            # 创建一群新的外星人和飞船
+            self._create_fleet()
+            self.ship.center_ship()
+            pygame.mouse.set_visible(False)
 
 
 if __name__ == "__main__":
