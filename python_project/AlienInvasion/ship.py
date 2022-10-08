@@ -1,7 +1,7 @@
 import pygame
 
 
-class Ship(object):
+class Ship(pygame.sprite.Sprite):
     """
     管理飞船的类
     """
@@ -9,6 +9,7 @@ class Ship(object):
         """
         初始化飞船并且设置位置
         """
+        super(Ship, self).__init__()
         self.setting = ai_game.settings
         self.screen = ai_game.screen
         # 获取屏幕的外接矩形

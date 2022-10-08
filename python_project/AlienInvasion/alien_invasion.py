@@ -8,6 +8,7 @@ import bullet
 import alien
 import game_stats
 import button
+import scoreboard
 
 
 class AlienInvasion(object):
@@ -34,6 +35,7 @@ class AlienInvasion(object):
         self._create_fleet()
         self.stats = game_stats.GameStats(self)
         self.play_button = button.Button(self, "Play")
+        self.sb = scoreboard.Scoreboard(self)
 
     def run_game(self) -> None:
         """
@@ -79,6 +81,7 @@ class AlienInvasion(object):
         self.aliens.draw(self.screen)
         if not self.stats.game_activate:
             self.play_button.draw_button()
+        self.sb.show_score()
         # 让最近录制的屏幕可见
         pygame.display.flip()
 
@@ -93,6 +96,7 @@ class AlienInvasion(object):
         elif event.key == pygame.K_LEFT:
             self.ship.moveing_left = True
         elif event.key == pygame.K_q:
+            self.stats.write_high_score_to_file()
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
@@ -142,10 +146,18 @@ class AlienInvasion(object):
         检查子弹和外星人碰撞
         :return:
         """
-        pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collects = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if collects:
+            for aliens in collects.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+            self.sb.check_high_score()
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _create_fleet(self) -> None:
         """
@@ -216,6 +228,7 @@ class AlienInvasion(object):
         """
         if self.stats.ship_left > 0:
             self.stats.ship_left -= 1
+            self.sb.prep_ships()
             self.aliens.empty()
             self.bullets.empty()
             self._create_fleet()
@@ -243,8 +256,12 @@ class AlienInvasion(object):
         :return:
         """
         if self.play_button.rect.collidepoint(mouse_pos) and not self.stats.game_activate:
+            self.settings.initialize_dynamic_setting()
             self.stats.reset_stats()
             self.stats.game_activate = True
+            self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
             # 清空余下的外星人和子弹
             self.aliens.empty()
             self.bullets.empty()
