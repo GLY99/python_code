@@ -14,11 +14,12 @@ class Solution:
             if char == '(':
                 stack.append(0)
             else:
-                cur = stack.pop()  # 遇到'）'弹出一个'（'的值
+                cur = stack.pop()  # 上一次得分
+                score = stack.pop()  # 最终得分
                 if cur == 0:
-                    stack.append(stack.pop() + 1)  # 最近的一次累加结果加上（）的值
+                    stack.append(score + 1)  # 最近的一次累加结果加上（）的值
                 else:
-                    stack.append(stack.pop() + 2 * cur)  # 最近的一次累加结果加上（A）的值
+                    stack.append(score + 2 * cur)  # 最近的一次累加结果加上（A）的值
         return stack.pop()
 
 
