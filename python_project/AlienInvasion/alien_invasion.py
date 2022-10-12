@@ -2,13 +2,13 @@ import sys
 import time
 from typing import Any
 import pygame
-import settings
-import ship
-import bullet
-import alien
-import game_stats
-import button
-import scoreboard
+from settings import Settings
+from ship import Ship
+from bullet import Bullet
+from alien import Alien
+from game_stats import GameStats
+from button import Button
+from scoreboard import Scoreboard
 
 
 class AlienInvasion(object):
@@ -21,7 +21,7 @@ class AlienInvasion(object):
         """
         super(AlienInvasion, self).__init__()
         pygame.init()
-        self.settings = settings.Settings()
+        self.settings = Settings()
         # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         # self.settings.screen_width = self.screen.get_rect().width
         # self.settings.screen_height = self.screen.get_rect().height
@@ -29,13 +29,13 @@ class AlienInvasion(object):
             (self.settings.screen_width, self.settings.screen_height)
         )
         pygame.display.set_caption("Alien Invasion(Enter 'Q' exit)")
-        self.ship = ship.Ship(self)
+        self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
-        self.stats = game_stats.GameStats(self)
-        self.play_button = button.Button(self, "Play")
-        self.sb = scoreboard.Scoreboard(self)
+        self.stats = GameStats(self)
+        self.play_button = Button(self, "Play")
+        self.sb = Scoreboard(self)
 
     def run_game(self) -> None:
         """
@@ -126,7 +126,7 @@ class AlienInvasion(object):
         :return:
         """
         if len(self.bullets) < self.settings.bullet_allowed:
-            new_bullet = bullet.Bullet(self)
+            new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
     def _update_bullet(self) -> None:
@@ -164,7 +164,7 @@ class AlienInvasion(object):
         创建外星人群
         :return:
         """
-        al = alien.Alien(self)
+        al = Alien(self)
         al_width, al_height = al.rect.size
         ship_height = self.ship.rect.height
         available_space_x = self.settings.screen_width - (2 * al_width)
@@ -183,7 +183,7 @@ class AlienInvasion(object):
         创建一个外星人并且将其放在当前行
         :return:
         """
-        al = alien.Alien(self)
+        al = Alien(self)
         al_width, al_height = al.rect.size
         al.x = al_width + 2 * al_width * alien_number
         al_y = al_height + 2 * al_height * row
