@@ -1,6 +1,7 @@
 import os
 import json
 
+
 class GameStats(object):
     """
     跟踪游戏的统计信息
