@@ -38,7 +38,7 @@ class Solution:
             # 计算下标 0-25 a-z
             char_num = ord(s[i - 1]) - ord('a')
             pre_count = dp[char_num]
-            dp[char_num] = (ans + 1) % mod
+            dp[char_num] = (ans + 1) % mod  # 单独作为一个子序列+前面位置的子序列数
             ans = (ans + dp[char_num] - pre_count) % mod
         return int(ans)
 
