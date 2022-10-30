@@ -38,9 +38,9 @@ class Solution:
             if idx == length:
                 ans_list.append(cur_s)
                 return
-            dfs(idx + 1, cur_s + s[idx])
             if 'a' <= s[idx] <= 'z' or 'A' <= s[idx] <= 'Z':
                 dfs(idx + 1, cur_s + s[idx].swapcase())
+            dfs(idx + 1, cur_s + s[idx])
 
         dfs(0, '')
         return ans_list
