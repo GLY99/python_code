@@ -24,3 +24,22 @@ class Solution:
                     ans[1] = j
         return [ans[0], ans[1]]
 
+    def beat_coordinate(self, towers: List[List[int]], redius: int) -> List[int]:
+        g = [[0] * 101 for _ in range(101)]
+        ans = [0, 0, 0]
+        for x, y , p in towers:
+            for i in range(0, x + redius + 1):
+                for j in range(0, y + redius + 1):
+                    d = math.sqrt((x - i) * (x - i) + (y - j) * (y - j))
+                    if d > redius:
+                        continue
+                    g[i][j] += int(p / (1 + d))
+                    if g[i][j] > ans[2]:
+                        ans[2] = g[i][j]
+                        ans[0] = i
+                        ans[1] = j
+                    elif g[i][j] == ans[2] and (i < ans[0] or (i == ans[0] and j < ans[1])):
+                        ans[0] = i
+                        ans[1] = j
+        return [ans[0], ans[1]]
+
