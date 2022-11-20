@@ -2,7 +2,6 @@ class Solution:
     @staticmethod
     def champagne_tower(poured: int, query_row: int, query_glass: int) -> float:
         """
-        :param self:
         :param poured: 倾倒香槟的总杯数
         :param query_row: 行数, 0 <= query_row < 100
         :param query_glass: 杯子的位置数 0 <= query_glass < 100
