@@ -47,11 +47,11 @@ class ThreadPool(object):
         for _ in range(num_threads):
             self.pool.append(Worker(self.task_queue))
 
-    def add_task(self, func, *args, **kargs):
+    def add_task(self, func, *args, **kwargs):
         """
         Add a task to the queue
         """
-        self.task_queue.put((func, args, kargs))
+        self.task_queue.put((func, args, kwargs))
 
     def wait_completion(self):
         """
