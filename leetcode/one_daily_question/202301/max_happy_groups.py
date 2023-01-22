@@ -27,8 +27,8 @@ class Solution:
             for i, c in enumerate(cnt):
                 if c > 0:
                     cnt[i] -= 1
-                    # i == 0 表示剩余 i + 1 面包， left是上次剩下的面包
-                    # left为0表示上次没有剩余面包，所以这次一定会有一个人开心
+                    # i == 0 表示剩余 i + 1 面包， left是上次剩下的面包。
+                    # left为0表示上次没有剩余面包，所以这次一定会有一个人开心。
                     res = max(res, (left == 0) + dfs((left + i + 1) % batch_size, tuple(cnt)))
                     cnt[i] += 1
             return res
