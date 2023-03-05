@@ -24,12 +24,12 @@ class Solution:
             wait -= boarding_customer
         idx += 1
         while wait > 0:
+            idx += 1
             boarding_customer = min(wait, 4)
             profile = boarding_customer * boarding_cost - running_cost
             profile_sum += profile
             if profile_sum > profile_max:
                 profile_max = profile_sum
-                idx += 1
                 ans = idx
             wait -= boarding_customer
         return ans if profile_max > 0 else -1
