@@ -18,7 +18,7 @@ async def main():
     init agent
     """
     base_url = "https://qianfan.baidubce.com/v2/"
-    api_key = "bce-v3/ALTAK-set78ktFUaE6VahFTIvcg/cda9fb9110e3cc35a78b9071235fb24362d607db"
+    api_key = "xxx"
     """
     无checkpointer:
     请输入问题：我叫张三

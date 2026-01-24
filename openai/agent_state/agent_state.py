@@ -8,7 +8,7 @@ from langgraph.types import Command
 from langchain_openai import ChatOpenAI
 from typing import Annotated
 
-
+# 动态配置
 class MyState(AgentState):
     username: str
 
@@ -56,6 +56,7 @@ async def main():
         state_schema=MyState  # 指定agent状态
     )
 
+    # config：RunnableConfig 这是静态配置
     async for chunk in agent.astream(input={"messages": {"role": "human", "content": "给当前用户生成祝福语句"}}, config=RunnableConfig(configurable={"username": "王五"})):
         # print(chunk)
         ai_messages = chunk.get("model", {}).get("messages")
