@@ -5,7 +5,11 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langchain_core.runnables import RunnableConfig
 
 """
-测试短期记忆存储
+测试记忆存储
+短期存储：可以用内存也可以用postgresql、redis
+长期存储：可以用postgresql也可以用redis；使用长期存储时必须使用短期存储。
+变量：长期存储变量是叫store，短期存储变量是叫checkpointer
+注意：如果初次使用postgresql进行存储，需要执行checkpointer或者store的setup()用来初始化一些存储记忆相关的表结构；否则会报UndefinedTable
 """
 
 
@@ -14,7 +18,7 @@ async def main():
     init agent
     """
     base_url = "https://qianfan.baidubce.com/v2/"
-    api_key = "xxx"
+    api_key = "bce-v3/ALTAK-set78ktFUaE6VahFTIvcg/cda9fb9110e3cc35a78b9071235fb24362d607db"
     """
     无checkpointer:
     请输入问题：我叫张三
@@ -44,6 +48,8 @@ async def main():
 
     while True:
         human_message = input("请输入问题：")
+        if human_message == "exit":
+            break
         async for chunk in agent.astream(
             input={"messages": {"role": "human", "content": human_message}},
             config=RunnableConfig(configurable={"thread_id": "1"})
@@ -55,6 +61,8 @@ async def main():
                 print(ai_messages[0].content)
             if tool_messages and len(tool_messages) > 0:
                 print(tool_messages[0].content)
+        state_snapshot = agent.get_state(RunnableConfig(configurable={"thread_id": "1"}))  # 获取短期记忆;获取长期记忆使用agent.get_state_history()
+        print(state_snapshot)
 
 
 if __name__ == "__main__":
