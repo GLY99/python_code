@@ -107,5 +107,6 @@ if __name__ == "__main__":
 
     
     state = State(topic="北极熊")
+    # invoke是最后的状态，需要接收最后的状态
     resp = graph.invoke(state)
     print(resp["joke"])

@@ -20,6 +20,7 @@ def get_user_name(tool_call_id: Annotated[str, InjectedToolCallId], config: Runn
     """
     username = config["configurable"].get("username", 'not found username from config["configurable"]')
     print(f"call get_user_name: username is {username}")
+    # 更新状态和messages
     return Command(
         update={
             "username": username,
